@@ -1,4 +1,5 @@
-FROM centos:latest
+#FROM centos:latest
+FROM phusion/baseimage
 MAINTAINER techolution.com
 
 ###############################################################################
@@ -10,8 +11,10 @@ MAINTAINER techolution.com
 ENV GOSU_VERSION 1.8
 
 RUN set -x \
- && yum update \
- && yum install -qqy --no-install-recommends ca-certificates curl \
+ #&& yum update \
+ && apt-get update -qq \
+ && apt-get install -qqy --no-install-recommends ca-certificates curl \
+ #&& yum install -y --no-install-recommends ca-certificates curl \
  && rm -rf /var/lib/apt/lists/* \
  && curl -L -o /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
  && curl -L -o /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
@@ -21,9 +24,12 @@ RUN set -x \
  && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
  && chmod +x /usr/local/bin/gosu \
  && gosu nobody true \
- && yum update \
- && yum install -qqy openjdk-8-jdk \
- && yum clean \
+ #&& yum update \
+ #&& yum install -y openjdk-8-jdk \
+ #&& yum clean \ 
+ && apt-get update -qq \
+ && apt-get install -qqy openjdk-8-jdk \
+ && apt-get clean \
  && set +x
 
 
